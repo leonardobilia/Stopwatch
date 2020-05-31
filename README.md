@@ -15,5 +15,5 @@ Here you can see a very simple way of implementing the new Diffable Datasource a
 My preferred way of writing apps lately. With just half of the number of lines of code in comparison to projects 1 and 2.
 
 
-![](Images/example_light.png)
-![](Images/example_dark.png)
+![](Images/example-light.png)
+![](Images/example-dark.png)
