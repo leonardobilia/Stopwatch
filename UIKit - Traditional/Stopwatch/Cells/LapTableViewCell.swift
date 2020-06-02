@@ -41,7 +41,6 @@ class LapTableViewCell: UITableViewCell {
 extension LapTableViewCell {
     
     private func setupUI() {
-        
         contentView.addSubview(lapLabel)
         contentView.addSubview(timerLabel)
         

@@ -46,9 +46,9 @@ class StopwatchViewController: UIViewController {
         counter += 0.001
         
         let millisecond = counter * 1000
-        let remaingMilliseconds = Int((Int(millisecond) % 1000) / 10)
-        let second = Int((Int(millisecond) / 1000) % 60)
-        let minute = Int((Int(millisecond) / 1000) / 60 % 60)
+        let remaingMilliseconds = (Int(millisecond) % 1000) / 10
+        let second = (Int(millisecond) / 1000) % 60
+        let minute = (Int(millisecond) / 1000) / 60 % 60
         
         DispatchQueue.main.async {
             self.minuteLabel.text = String(format: "%02i", minute)
@@ -82,11 +82,11 @@ class StopwatchViewController: UIViewController {
     }
     
     @objc private func resetHandler() {
-        lappedTimes = []
+        lappedTimes = [LapTime]()
         timerOn = false
         counter = 0
         timer.invalidate()
-        
+
         DispatchQueue.main.async {
             self.minuteLabel.setup(title: "00")
             self.secondLabel.setup(title: "00")
