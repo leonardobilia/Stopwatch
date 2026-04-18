@@ -3,36 +3,26 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 70;
 	objects = {
-
-/* Begin PBXBuildFile section */
-		8F515257248420B20016A33A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F515256248420B20016A33A /* AppDelegate.swift */; };
-		8F515259248420B20016A33A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F515258248420B20016A33A /* SceneDelegate.swift */; };
-		8F51525B248420B20016A33A /* StopwatchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F51525A248420B20016A33A /* StopwatchViewController.swift */; };
-		8F515260248420B30016A33A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F51525F248420B30016A33A /* Assets.xcassets */; };
-		8F515263248420B30016A33A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8F515261248420B30016A33A /* LaunchScreen.storyboard */; };
-		8F51526F248421C60016A33A /* SWButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F51526E248421C60016A33A /* SWButton.swift */; };
-		8F515271248421DA0016A33A /* SWLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F515270248421D90016A33A /* SWLabel.swift */; };
-		8F515273248421EF0016A33A /* SWStackView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F515272248421EF0016A33A /* SWStackView.swift */; };
-		8F5152752484220E0016A33A /* LapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5152742484220E0016A33A /* LapTableViewCell.swift */; };
-		8F5152782484239E0016A33A /* LapTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F5152772484239E0016A33A /* LapTime.swift */; };
-/* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		8F515253248420B20016A33A /* Stopwatch.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stopwatch.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		8F515256248420B20016A33A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		8F515258248420B20016A33A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		8F51525A248420B20016A33A /* StopwatchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopwatchViewController.swift; sourceTree = "<group>"; };
-		8F51525F248420B30016A33A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8F515262248420B30016A33A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		8F515264248420B30016A33A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8F51526E248421C60016A33A /* SWButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWButton.swift; sourceTree = "<group>"; };
-		8F515270248421D90016A33A /* SWLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWLabel.swift; sourceTree = "<group>"; };
-		8F515272248421EF0016A33A /* SWStackView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWStackView.swift; sourceTree = "<group>"; };
-		8F5152742484220E0016A33A /* LapTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LapTableViewCell.swift; sourceTree = "<group>"; };
-		8F5152772484239E0016A33A /* LapTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LapTime.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8F9B33332F94385B00E896CC /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8F515252248420B20016A33A /* Stopwatch */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		8F9B33272F94385A00E896CC /* Stopwatch */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (8F9B33332F94385B00E896CC /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Stopwatch; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		8F515250248420B20016A33A /* Frameworks */ = {
@@ -48,7 +38,7 @@
 		8F51524A248420B20016A33A = {
 			isa = PBXGroup;
 			children = (
-				8F515255248420B20016A33A /* Stopwatch */,
+				8F9B33272F94385A00E896CC /* Stopwatch */,
 				8F515254248420B20016A33A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -59,64 +49,6 @@
 				8F515253248420B20016A33A /* Stopwatch.app */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		8F515255248420B20016A33A /* Stopwatch */ = {
-			isa = PBXGroup;
-			children = (
-				8F51526A2484216B0016A33A /* System */,
-				8F51526B2484217D0016A33A /* Components */,
-				8F515276248423690016A33A /* Model */,
-				8F51526C2484218A0016A33A /* Cells */,
-				8F51526D248421970016A33A /* Controllers */,
-				8F51525F248420B30016A33A /* Assets.xcassets */,
-				8F515261248420B30016A33A /* LaunchScreen.storyboard */,
-				8F515264248420B30016A33A /* Info.plist */,
-			);
-			path = Stopwatch;
-			sourceTree = "<group>";
-		};
-		8F51526A2484216B0016A33A /* System */ = {
-			isa = PBXGroup;
-			children = (
-				8F515256248420B20016A33A /* AppDelegate.swift */,
-				8F515258248420B20016A33A /* SceneDelegate.swift */,
-			);
-			path = System;
-			sourceTree = "<group>";
-		};
-		8F51526B2484217D0016A33A /* Components */ = {
-			isa = PBXGroup;
-			children = (
-				8F51526E248421C60016A33A /* SWButton.swift */,
-				8F515270248421D90016A33A /* SWLabel.swift */,
-				8F515272248421EF0016A33A /* SWStackView.swift */,
-			);
-			path = Components;
-			sourceTree = "<group>";
-		};
-		8F51526C2484218A0016A33A /* Cells */ = {
-			isa = PBXGroup;
-			children = (
-				8F5152742484220E0016A33A /* LapTableViewCell.swift */,
-			);
-			path = Cells;
-			sourceTree = "<group>";
-		};
-		8F51526D248421970016A33A /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				8F51525A248420B20016A33A /* StopwatchViewController.swift */,
-			);
-			path = Controllers;
-			sourceTree = "<group>";
-		};
-		8F515276248423690016A33A /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				8F5152772484239E0016A33A /* LapTime.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -134,6 +66,9 @@
 			);
 			dependencies = (
 			);
+			fileSystemSynchronizedGroups = (
+				8F9B33272F94385A00E896CC /* Stopwatch */,
+			);
 			name = Stopwatch;
 			productName = Stopwatch;
 			productReference = 8F515253248420B20016A33A /* Stopwatch.app */;
@@ -145,8 +80,9 @@
 		8F51524B248420B20016A33A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1150;
-				LastUpgradeCheck = 1150;
+				LastUpgradeCheck = 2640;
 				ORGANIZATIONNAME = "Leonardo Bilia";
 				TargetAttributes = {
 					8F515252248420B20016A33A = {
@@ -177,8 +113,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F515263248420B30016A33A /* LaunchScreen.storyboard in Resources */,
-				8F515260248420B30016A33A /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,35 +123,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8F51525B248420B20016A33A /* StopwatchViewController.swift in Sources */,
-				8F515273248421EF0016A33A /* SWStackView.swift in Sources */,
-				8F515271248421DA0016A33A /* SWLabel.swift in Sources */,
-				8F515257248420B20016A33A /* AppDelegate.swift in Sources */,
-				8F5152782484239E0016A33A /* LapTime.swift in Sources */,
-				8F5152752484220E0016A33A /* LapTableViewCell.swift in Sources */,
-				8F515259248420B20016A33A /* SceneDelegate.swift in Sources */,
-				8F51526F248421C60016A33A /* SWButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXVariantGroup section */
-		8F515261248420B30016A33A /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				8F515262248420B30016A33A /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		8F515265248420B30016A33A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -240,6 +156,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -248,8 +165,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = C8CWPZXDG8;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -264,11 +183,12 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -278,6 +198,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -300,6 +221,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -308,8 +230,10 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = C8CWPZXDG8;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -318,10 +242,11 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				VALIDATE_PRODUCT = YES;
@@ -333,7 +258,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = C8CWPZXDG8;
 				INFOPLIST_FILE = Stopwatch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -351,7 +275,6 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = C8CWPZXDG8;
 				INFOPLIST_FILE = Stopwatch/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

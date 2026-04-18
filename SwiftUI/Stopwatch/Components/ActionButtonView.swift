@@ -1,52 +1,36 @@
-//
-//  ActionButtonView.swift
-//  Stopwatch
-//
-//  Created by Leonardo Bilia on 31/05/20.
-//  Copyright © 2020 Leonardo Bilia. All rights reserved.
-//
-
 import SwiftUI
 
 struct ActionButtonView: View {
-    
-    enum Style {
-        case lap, reset, start, stop
-        
-        var title: String {
-            switch self {
-            case .lap: return "Lap"
-            case .reset: return "Reset"
-            case .start: return "Start"
-            case .stop: return "Stop"
-            }
-        }
-        
-        var color: Color {
-            switch self {
-            case .lap, .reset: return Color(.systemGray)
-            case .start: return Color(.systemGreen)
-            case .stop: return Color(.systemRed)
-            }
-        }
-    }
-    
-    var style: Style
+    let title: String
+    let systemImage: String
+    let tint: Color
+    let isEnabled: Bool
 
     var body: some View {
-        HStack {
-            Spacer()
-            Text(style.title)
-                .foregroundColor(Color(.white))
-            Spacer()
+        VStack(spacing: 10) {
+            Image(systemName: systemImage)
+                .font(.system(size: 18, weight: .semibold))
+
+            Text(title)
+                .font(.system(size: 16, weight: .semibold, design: .rounded))
         }
-        .frame(height: 80)
-        .background(style.color.cornerRadius(.infinity))
+        .frame(maxWidth: .infinity)
+        .frame(height: 72)
+        .foregroundStyle(isEnabled ? Color.white : Color.secondary)
+        .background(
+            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                .fill(isEnabled ? tint.gradient : Color(.tertiarySystemFill).gradient)
+        )
+        .opacity(isEnabled ? 1 : 0.75)
     }
 }
 
-struct ActionButtonView_Previews: PreviewProvider {
-    static var previews: some View {
-        ActionButtonView(style: .start)
+#Preview {
+    HStack(spacing: 12) {
+        ActionButtonView(title: "Lap", systemImage: "flag.fill", tint: .blue, isEnabled: true)
+        ActionButtonView(title: "Reset", systemImage: "arrow.counterclockwise", tint: .gray, isEnabled: false)
+        ActionButtonView(title: "Start", systemImage: "play.fill", tint: .green, isEnabled: true)
     }
+    .padding()
+    .background(Color(.systemGroupedBackground))
 }

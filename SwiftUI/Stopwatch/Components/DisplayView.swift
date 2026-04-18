@@ -1,37 +1,64 @@
-//
-//  DisplayView.swift
-//  Stopwatch
-//
-//  Created by Leonardo Bilia on 31/05/20.
-//  Copyright © 2020 Leonardo Bilia. All rights reserved.
-//
-
 import SwiftUI
 
 struct DisplayView: View {
-    
-    var minutes: String
-    var seconds: String
-    var milliseconds: String
-    
+    let display: StopwatchDisplay
+    let isRunning: Bool
+
     var body: some View {
-        HStack {
-            Text(minutes)
-                .frame(width: (UIScreen.main.bounds.width / 4))
-            Text(":")
-            Text(seconds)
-                .frame(width: (UIScreen.main.bounds.width / 4))
-            Text(":")
-            Text(milliseconds)
-                .frame(width: (UIScreen.main.bounds.width / 4))
+        VStack(spacing: 18) {
+            VStack(spacing: 6) {
+                Text(isRunning ? "Running" : "Ready")
+                    .font(.headline)
+                    .foregroundStyle(isRunning ? Color.green : Color.secondary)
+
+                Text("Built with native SwiftUI state and a TimelineView-driven display.")
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+            }
+
+            HStack(alignment: .firstTextBaseline, spacing: 8) {
+                timeText(display.minutes)
+                separator
+                timeText(display.seconds)
+                separator
+                timeText(display.centiseconds)
+            }
+            .accessibilityLabel(display.accessibilityLabel)
         }
-        .font(.system(size: 70))
-        .padding()
+        .frame(maxWidth: .infinity)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 28)
+        .background(
+            RoundedRectangle(cornerRadius: 30, style: .continuous)
+                .fill(.thinMaterial)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 30, style: .continuous)
+                        .stroke(Color.primary.opacity(0.08), lineWidth: 1)
+                )
+        )
+    }
+
+    private var separator: some View {
+        Text(":")
+            .font(.system(size: 36, weight: .semibold, design: .rounded))
+            .foregroundStyle(.secondary)
+    }
+
+    private func timeText(_ text: String) -> some View {
+        Text(text)
+            .font(.system(size: 56, weight: .bold, design: .rounded))
+            .monospacedDigit()
+            .contentTransition(.numericText())
+            .frame(maxWidth: .infinity)
     }
 }
 
-struct DisplayView_Previews: PreviewProvider {
-    static var previews: some View {
-        DisplayView(minutes: "00", seconds: "00", milliseconds: "00")
-    }
+#Preview {
+    DisplayView(
+        display: StopwatchDisplay(minutes: "03", seconds: "42", centiseconds: "18"),
+        isRunning: true
+    )
+    .padding()
+    .background(Color(.systemGroupedBackground))
 }

@@ -1,202 +1,234 @@
-//
-//  StopwatchViewController.swift
-//  Stopwatch
-//
-//  Created by Leonardo Bilia on 31/05/20.
-//  Copyright © 2020 Leonardo Bilia. All rights reserved.
-//
-
 import UIKit
 
-class StopwatchViewController: UIViewController {
-    
-    private let reusableIdentifier = "SWCell"
-    private lazy var tableView = UITableView()
+final class StopwatchViewController: UIViewController {
+    private enum Layout {
+        static let heroInset: CGFloat = 16
+        static let contentSpacing: CGFloat = 18
+        static let tableTopSpacing: CGFloat = 14
+        static let buttonHeight: CGFloat = 56
+    }
 
-    private lazy var minuteLabel = SWLabel()
-    private lazy var secondLabel = SWLabel()
-    private lazy var millisecondLabel = SWLabel()
-    private lazy var primarySeparatorLabel = SWLabel()
-    private lazy var secondarySeparatorLabel = SWLabel()
-    
-    private lazy var lapButton = SWButton()
-    private lazy var resetButton = SWButton()
-    private lazy var startStopButton = SWButton()
-    
-    private lazy var labelStackView = SWStackView()
-    private lazy var buttonStackView = SWStackView()
-    
-    private lazy var lappedTimes = [LapTime]()
-    private lazy var counter = 0.001
-    private lazy var timerOn = false
-    private var timer = Timer()
-    
-    private var dataSource: UITableViewDiffableDataSource<Section, LapTime>?
-        
-    // MARK: - Life Cycle
-    
+    private enum Section: Hashable {
+        case main
+    }
+
+    private let reusableIdentifier = "LapCell"
+    private let engine = StopwatchEngine()
+
+    private let heroCard = UIView()
+    private let subtitleLabel = UILabel()
+    private let emptyStateLabel = UILabel()
+    private let tableView = UITableView(frame: .zero, style: .plain)
+
+    private let minuteLabel = SWLabel()
+    private let secondLabel = SWLabel()
+    private let millisecondLabel = SWLabel()
+    private let primarySeparatorLabel = SWLabel()
+    private let secondarySeparatorLabel = SWLabel()
+
+    private let lapButton = SWButton()
+    private let resetButton = SWButton()
+    private let startStopButton = SWButton()
+
+    private let labelStackView = SWStackView()
+    private let buttonStackView = SWStackView()
+
+    private var displayLink: CADisplayLink?
+    private lazy var dataSource = makeDataSource()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Modern UIKit"
+        navigationItem.largeTitleDisplayMode = .always
         setupTableView()
         setupDataSource()
         setupComponents()
         setupUI()
+        render()
+        applySnapshot()
     }
-    
-    // MARK: - Actions
-    
-    @objc private func timerHandler() {
-        counter += 0.001
-        
-        let millisecond = counter * 1000
-        let remaingMilliseconds = (Int(millisecond) % 1000) / 10
-        let second = (Int(millisecond) / 1000) % 60
-        let minute = (Int(millisecond) / 1000) / 60 % 60
-        
-        DispatchQueue.main.async {
-            self.minuteLabel.text = String(format: "%02i", minute)
-            self.secondLabel.text = String(format: "%02i", second)
-            self.millisecondLabel.text = String(format: "%02i", remaingMilliseconds)
-        }
+
+    deinit {
+        displayLink?.invalidate()
     }
-    
+
     @objc private func startStopHandler() {
-        if timerOn {
-            timer.invalidate()
-        } else {
-            let timer = Timer(timeInterval: 0.001, target: self, selector: #selector(timerHandler), userInfo: nil, repeats: true)
-            RunLoop.current.add(timer, forMode: .common)
-            timer.tolerance = 0.0001
-            self.timer = timer
-        }
-        self.timerOn.toggle()
-        DispatchQueue.main.async {
-            self.startStopButton.setTitle(self.timerOn ? "Stop" : "Start", for: .normal)
-            self.startStopButton.backgroundColor = self.timerOn ? .systemRed : .systemGreen
-        }
+        engine.toggle()
+        updateDisplayLinkState()
+        render()
     }
-    
+
     @objc private func lapHandler() {
-        guard let minute = minuteLabel.text, let second = secondLabel.text, let millisecond = millisecondLabel.text, timerOn else { return }
-        
-        let indexPath = IndexPath(row: lappedTimes.count, section: 0)
-        lappedTimes.append(LapTime(title: "Lap \(indexPath.row + 1)", time: "\(minute):\(second):\(millisecond)"))
-        snapshot(from: lappedTimes)
+        guard engine.recordLap() != nil else { return }
+        applySnapshot(animated: true)
+        render()
     }
-    
+
     @objc private func resetHandler() {
-        lappedTimes = [LapTime]()
-        timerOn = false
-        counter = 0
-        timer.invalidate()
-        snapshot(from: lappedTimes)
-        
-        DispatchQueue.main.async {
-            self.minuteLabel.setup(title: "00")
-            self.secondLabel.setup(title: "00")
-            self.millisecondLabel.setup(title: "00")
-            self.startStopButton.setTitle("Start", for: .normal)
-            self.startStopButton.backgroundColor = .systemGreen
-        }
+        engine.reset()
+        updateDisplayLinkState()
+        applySnapshot(animated: false)
+        render()
     }
-    
-    // MARK: - Methods
-    
-    func setupTableView() {
+
+    @objc private func updateElapsedTime() {
+        renderElapsedTime()
+    }
+
+    private func setupTableView() {
         tableView.register(LapTableViewCell.self, forCellReuseIdentifier: reusableIdentifier)
-        tableView.estimatedRowHeight = 50
-        tableView.rowHeight = 50
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.allowsSelection = false
+        tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 24, right: 0)
+        tableView.showsVerticalScrollIndicator = false
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 88
+
+        emptyStateLabel.text = "Start the timer and capture laps."
+        emptyStateLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        emptyStateLabel.textColor = .secondaryLabel
+        emptyStateLabel.textAlignment = .center
+        emptyStateLabel.numberOfLines = 0
+        emptyStateLabel.frame = CGRect(x: 0, y: 0, width: 0, height: 140)
+        tableView.backgroundView = emptyStateLabel
     }
-    
-    func setupComponents() {
+
+    private func setupDataSource() {
+        _ = dataSource
+    }
+
+    private func setupComponents() {
+        view.backgroundColor = .systemGroupedBackground
+
+        heroCard.translatesAutoresizingMaskIntoConstraints = false
+        heroCard.backgroundColor = .secondarySystemGroupedBackground
+        heroCard.layer.cornerRadius = 28
+        heroCard.layer.cornerCurve = .continuous
+
+        subtitleLabel.translatesAutoresizingMaskIntoConstraints = false
+        subtitleLabel.text = "Diffable data source + snapshot updates"
+        subtitleLabel.font = .systemFont(ofSize: 15, weight: .medium)
+        subtitleLabel.textColor = .secondaryLabel
+        subtitleLabel.textAlignment = .center
+        subtitleLabel.numberOfLines = 0
+
         minuteLabel.setup(title: "00")
         secondLabel.setup(title: "00")
         millisecondLabel.setup(title: "00")
-        primarySeparatorLabel.setup(title: ":")
-        secondarySeparatorLabel.setup(title: ":")
-        
-        labelStackView.setup(spacing: 0, distribution: .equalCentering)
-        buttonStackView.setup(spacing: 16, distribution: .fillEqually)
-        
-        lapButton.setup(title: "Lap", color: .secondaryLabel)
+        primarySeparatorLabel.setup(title: ":", style: .separator)
+        secondarySeparatorLabel.setup(title: ":", style: .separator)
+
+        labelStackView.setup(spacing: 10, distribution: .fill, alignment: .center)
+        buttonStackView.setup(spacing: 12, distribution: .fillEqually)
+
+        lapButton.setup(title: "Lap", color: .systemBlue, isEnabled: false)
+        lapButton.accessibilityIdentifier = "stopwatch.lap"
         lapButton.addTarget(self, action: #selector(lapHandler), for: .touchUpInside)
-        
-        resetButton.setup(title: "Reset", color: .secondaryLabel)
+
+        resetButton.setup(title: "Reset", color: .secondaryLabel, isEnabled: false)
+        resetButton.accessibilityIdentifier = "stopwatch.reset"
         resetButton.addTarget(self, action: #selector(resetHandler), for: .touchUpInside)
-        
+
         startStopButton.setup(title: "Start", color: .systemGreen)
+        startStopButton.accessibilityIdentifier = "stopwatch.startStop"
         startStopButton.addTarget(self, action: #selector(startStopHandler), for: .touchUpInside)
     }
-}
 
-// MARK: - Table View Diffable Data Sources
-
-extension StopwatchViewController {
-    
-    func setupDataSource() {
-        dataSource = UITableViewDiffableDataSource<Section, LapTime>(tableView: tableView, cellProvider: { (tableView, indexPath, laptime) -> LapTableViewCell? in
-            let cell = tableView.dequeueReusableCell(withIdentifier: self.reusableIdentifier, for: indexPath) as! LapTableViewCell
-            cell.selectionStyle = .none
-            cell.populate(lap: laptime)
-            return cell
-        })
-    }
-
-    func snapshot(from lappedTimes: [LapTime]) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, LapTime>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems(lappedTimes, toSection: .main)
-        dataSource?.apply(snapshot, animatingDifferences: true)
-    }
-}
-
-
-// MARK: - UI
-
-extension StopwatchViewController {
-    
-    func setupUI() {
-        view.backgroundColor = .systemBackground
-    
-        view.addSubview(tableView)
-        view.addSubview(minuteLabel)
+    private func setupUI() {
+        view.addSubview(heroCard)
         view.addSubview(buttonStackView)
-        buttonStackView.addArrangedSubview(lapButton)
-        buttonStackView.addArrangedSubview(resetButton)
-        buttonStackView.addArrangedSubview(startStopButton)
-        
-        view.addSubview(labelStackView)
+        view.addSubview(tableView)
+
+        heroCard.addSubview(subtitleLabel)
+        heroCard.addSubview(labelStackView)
+
         labelStackView.addArrangedSubview(minuteLabel)
         labelStackView.addArrangedSubview(primarySeparatorLabel)
         labelStackView.addArrangedSubview(secondLabel)
         labelStackView.addArrangedSubview(secondarySeparatorLabel)
         labelStackView.addArrangedSubview(millisecondLabel)
 
-        view.subviews.forEach({ element in
-            element.translatesAutoresizingMaskIntoConstraints = false
-        })
-        
-        let width: CGFloat = (UIScreen.main.bounds.width / 3) - 28
-        NSLayoutConstraint.activate([
-            labelStackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            labelStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            labelStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            minuteLabel.widthAnchor.constraint(equalToConstant: width),
-            secondLabel.widthAnchor.constraint(equalToConstant: width),
-            millisecondLabel.widthAnchor.constraint(equalToConstant: width),
-            
-            buttonStackView.topAnchor.constraint(equalTo: labelStackView.bottomAnchor),
-            buttonStackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            buttonStackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            buttonStackView.bottomAnchor.constraint(equalTo: view.centerYAnchor),
-            buttonStackView.heightAnchor.constraint(equalToConstant: 80),
+        buttonStackView.addArrangedSubview(lapButton)
+        buttonStackView.addArrangedSubview(resetButton)
+        buttonStackView.addArrangedSubview(startStopButton)
 
-            tableView.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: 8),
+        let guide = view.safeAreaLayoutGuide
+        NSLayoutConstraint.activate([
+            heroCard.topAnchor.constraint(equalTo: guide.topAnchor, constant: 20),
+            heroCard.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: Layout.heroInset),
+            heroCard.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -Layout.heroInset),
+
+            subtitleLabel.topAnchor.constraint(equalTo: heroCard.topAnchor, constant: 22),
+            subtitleLabel.leadingAnchor.constraint(equalTo: heroCard.leadingAnchor, constant: 20),
+            subtitleLabel.trailingAnchor.constraint(equalTo: heroCard.trailingAnchor, constant: -20),
+
+            labelStackView.topAnchor.constraint(equalTo: subtitleLabel.bottomAnchor, constant: 20),
+            labelStackView.leadingAnchor.constraint(equalTo: heroCard.leadingAnchor, constant: 16),
+            labelStackView.trailingAnchor.constraint(equalTo: heroCard.trailingAnchor, constant: -16),
+            labelStackView.bottomAnchor.constraint(equalTo: heroCard.bottomAnchor, constant: -22),
+
+            minuteLabel.widthAnchor.constraint(equalTo: secondLabel.widthAnchor),
+            secondLabel.widthAnchor.constraint(equalTo: millisecondLabel.widthAnchor),
+            primarySeparatorLabel.widthAnchor.constraint(equalToConstant: 14),
+            secondarySeparatorLabel.widthAnchor.constraint(equalToConstant: 14),
+
+            buttonStackView.topAnchor.constraint(equalTo: heroCard.bottomAnchor, constant: Layout.contentSpacing),
+            buttonStackView.leadingAnchor.constraint(equalTo: guide.leadingAnchor, constant: Layout.heroInset),
+            buttonStackView.trailingAnchor.constraint(equalTo: guide.trailingAnchor, constant: -Layout.heroInset),
+            buttonStackView.heightAnchor.constraint(equalToConstant: Layout.buttonHeight),
+
+            tableView.topAnchor.constraint(equalTo: buttonStackView.bottomAnchor, constant: Layout.tableTopSpacing),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-}
 
+    private func render() {
+        renderElapsedTime()
+        lapButton.setup(title: "Lap", color: .systemBlue, isEnabled: engine.isRunning)
+        resetButton.setup(title: "Reset", color: .secondaryLabel, isEnabled: engine.canReset && !engine.isRunning)
+        startStopButton.setup(
+            title: engine.isRunning ? "Stop" : "Start",
+            color: engine.isRunning ? .systemRed : .systemGreen
+        )
+        emptyStateLabel.isHidden = !engine.laps.isEmpty
+    }
+
+    private func renderElapsedTime() {
+        let display = engine.display()
+        minuteLabel.text = display.minutes
+        secondLabel.text = display.seconds
+        millisecondLabel.text = display.centiseconds
+        view.accessibilityLabel = "Stopwatch"
+        view.accessibilityValue = display.accessibilityLabel
+    }
+
+    private func updateDisplayLinkState() {
+        displayLink?.invalidate()
+        displayLink = nil
+
+        guard engine.isRunning else { return }
+
+        let displayLink = CADisplayLink(target: self, selector: #selector(updateElapsedTime))
+        displayLink.add(to: .main, forMode: .common)
+        self.displayLink = displayLink
+    }
+
+    private func applySnapshot(animated: Bool = false) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, LapTime>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(engine.laps, toSection: .main)
+        dataSource.apply(snapshot, animatingDifferences: animated)
+    }
+
+    private func makeDataSource() -> UITableViewDiffableDataSource<Section, LapTime> {
+        UITableViewDiffableDataSource(tableView: tableView) { [reusableIdentifier] tableView, indexPath, lap in
+            let cell = tableView.dequeueReusableCell(withIdentifier: reusableIdentifier, for: indexPath) as! LapTableViewCell
+            cell.populate(lap: lap)
+            return cell
+        }
+    }
+}
