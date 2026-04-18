@@ -1,26 +1,64 @@
 # Stopwatch
-This is a simple Stopwatch app to demonstrate the differences between UIKit and SwiftUI.
 
-The ideia was to build the same app three times to represent the “old”  and the “new” way of creating a table view in UIKit. Then, I wrote the same exact app in SwiftUI.
+`Stopwatch` is a small open source sample that builds the same stopwatch experience three ways:
 
-I tried not to worry about architecture, patterns, test, or anything other than just showing the base differences between the three approaches.
+1. `UIKit - Traditional`
+2. `UIKit - DiffableDatasource`
+3. `SwiftUI`
 
-## Project 1: UIKit Tradicional.
-Using the great and most common way of writing table view using Datasources and Delegates.
+The goal of the project is still the same: compare how the same product idea feels when it is implemented with classic UIKit patterns, modern UIKit APIs, and native SwiftUI.
 
-## Project 2: UIKit- Diffable Datasource.
-Here you can see a very simple way of implementing the new Diffable Datasource and snapshot to update the UI without needing indexpath.row or array.count. Update the snapshot and you UI will reflect immediately.
+This refreshed version targets `iOS 26.0` and modernizes all three apps from scratch while keeping the original purpose of the repository intact.
 
-## Project 3: SwiftUI.
-My preferred way of writing apps lately. With just half of the number of lines of code in comparison to projects 1 and 2.
+## What Changed
 
+All three apps now share the same overall experience:
+
+- Start / stop timing
+- Capture laps
+- Reset when stopped
+- Highlight the fastest and slowest laps
+- Use a cleaner, more current visual style
+
+Each target focuses on a different implementation style:
+
+## Project 1: UIKit Traditional
+
+This version keeps the classic UIKit approach:
+
+- `UIViewController`
+- Manual `UITableViewDataSource` and `UITableViewDelegate`
+- Custom table view cell registration with reuse identifiers
+- Explicit view hierarchy and layout code
+
+## Project 2: UIKit Modern
+
+This version shows a more current UIKit style:
+
+- `UITableViewDiffableDataSource`
+- Snapshot-driven updates
+- Programmatic custom cells with reusable registration
+- Configuration-based buttons
+
+## Project 3: SwiftUI
+
+This version uses a native SwiftUI app lifecycle and modern SwiftUI state:
+
+- `@main` SwiftUI app entry point
+- `@Observable` stopwatch model
+- `TimelineView` for the live timer display
+- Small composable views instead of UIKit lifecycle wrappers
+
+## Why This Repo Exists
+
+The project is intentionally small so the differences between the three approaches are easy to inspect. It is meant to be a practical side-by-side reference, not a large production architecture sample.
 
 ![](Screenshots/device-light.png)
 ![](Screenshots/device-dark.png)
 
-# Contributing
+## Contributing
 
-Contributions are what make the open source community such a fantastic place to learn, share, inspire, and create. Any contributions you make are greatly appreciated.
+Contributions are welcome and appreciated.
 
 - Fork the project
 - Create your feature branch `git checkout -b feature/AmazingFeature`
@@ -28,10 +66,10 @@ Contributions are what make the open source community such a fantastic place to 
 - Push to the branch `git push origin feature/AmazingFeature`
 - Open a pull request
 
-# License
+## License
 
 See [LICENSE](LICENSE)
 
-# Contact
+## Contact
 
 Leonardo Bilia - [@leonardobilia](https://twitter.com/leonardobilia)

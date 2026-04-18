@@ -1,26 +1,31 @@
-//
-//  SWLabel.swift
-//  Stopwatch
-//
-//  Created by Leonardo Bilia on 31/05/20.
-//  Copyright © 2020 Leonardo Bilia. All rights reserved.
-//
-
 import UIKit
 
-class SWLabel: UILabel {
-    
+final class SWLabel: UILabel {
+    enum Style {
+        case timerValue
+        case separator
+    }
+
     override init(frame: CGRect) {
         super.init(frame: frame)
+        adjustsFontSizeToFitWidth = true
+        minimumScaleFactor = 0.55
+        textAlignment = .center
+        textColor = .label
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func setup(title: String) {
-        self.text = title
-        self.font = UIFont.systemFont(ofSize: 75)
-        self.textAlignment = .center
+
+    func setup(title: String, style: Style = .timerValue) {
+        text = title
+
+        switch style {
+        case .timerValue:
+            font = .monospacedDigitSystemFont(ofSize: 60, weight: .bold)
+        case .separator:
+            font = .systemFont(ofSize: 44, weight: .semibold)
+        }
     }
 }
