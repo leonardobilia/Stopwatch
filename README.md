@@ -53,8 +53,10 @@ This version uses a native SwiftUI app lifecycle and modern SwiftUI state:
 
 The project is intentionally small so the differences between the three approaches are easy to inspect. It is meant to be a practical side-by-side reference, not a large production architecture sample.
 
-![](Screenshots/device-light.png)
-![](Screenshots/device-dark.png)
+<p align="center">
+  <img src="Screenshots/device-light.png" alt="Stopwatch screenshots in light mode" width="48%" />
+  <img src="Screenshots/device-dark.png" alt="Stopwatch screenshots in dark mode" width="48%" />
+</p>
 
 ## Contributing
 
